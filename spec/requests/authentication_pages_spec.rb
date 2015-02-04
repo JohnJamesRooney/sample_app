@@ -168,6 +168,15 @@ describe "Authentication" do
           end
         end
       end
+
+      describe "cannot delete posts of another user" do
+        let(:anotherUser) { FactoryGirl.create(:user, email: "anotherUser@example.com") }
+        before do
+          FactoryGirl.create(:micropost, user: anotherUser, content: "Foobar")
+          visit user_path(anotherUser)
+        end
+        it { should_not have_link('delete', href: user_path(anotherUser)) }
+      end
     end
   end
 end
